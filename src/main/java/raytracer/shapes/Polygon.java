@@ -5,7 +5,7 @@ import raytracer.*;
 public class Polygon {
 	final double a, b, c, d;
 	final Vector normal;
-	final Plane plane;
+	//final Plane plane;
 
 	public Polygon(double a, double b, double c, double d) {
 		this.a = a;
@@ -14,6 +14,6 @@ public class Polygon {
 		this.d = d;
 
 		this.normal = new Vector(a, b, c).normalize();
-		this.plane = new Plane(a, b, c, d);
+		//this.plane = new Plane(a, b, c, d);
 	}
 }

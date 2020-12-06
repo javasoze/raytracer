@@ -2,7 +2,7 @@ package raytracer.shapes;
 
 import raytracer.*;
 
-public class Disc extends Shape {
+public class Disc { //extends Shape {
 	private Point center;
 	private Vector normal;
 	private double radius;
@@ -15,7 +15,7 @@ public class Disc extends Shape {
 		Log.warn("Disc shape is not supported. This shape will be ignored.");
 	}
 
-	@Override
+
 	public RayHit intersect(Ray ray) {
 		return null;
 	}

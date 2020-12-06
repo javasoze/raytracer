@@ -1,0 +1,155 @@
+eye:
+  x: 1
+  y: -10
+  z: 5
+
+center:
+  x: 1
+  y: 10
+  z: -3
+up:
+  x: 0
+  y: 0
+  z: 1
+
+fovy: 20.0
+
+lights:
+  - type: ambient
+    location:
+      x: 0.0
+      y: 0.0
+      z: 0.0
+    color:
+      red: 0.5
+      green: 0.5
+      blue: 0.5
+    a: 0
+    b: 0
+    c: 0
+  - location:
+      x: -100
+      y: -100
+      z: 100
+    color:
+      red: 1
+      green: 1
+      blue: 1
+    a: 1
+    b: 0
+    c: 0
+  - location:
+      x: 1
+      y: 4
+      z: 3
+    color:
+      red: 0.4
+      green: 0.4
+      blue: 0.4
+    a: 0
+    b: 0
+    c: 0.01
+
+pigments:
+  - type: solid
+    color:
+      red: 1.0
+      green: 0.0
+      blue: 0.0
+  - type: solid
+    color:
+      red: 0.0
+      green: 0.6
+      blue: 0.0
+  - type: solid
+    color:
+      red: 0.0
+      green: 0.0
+      blue: 1.0
+  - type: checker
+    color1:
+      red: 0.5
+      green: 0.2
+      blue: 0.8
+    color2:
+      red: 0.1
+      green: 0.7
+      blue: 0.2
+    scale: 0.5
+  - type: solid
+    color:
+      red: 0.8
+      green: 0.3
+      blue: 0.7
+
+finishes:
+  - amb: 0.7
+    diff: 0.3
+    spec: 0.0
+    shiny: 1.0
+    refl: 0.0
+    trans: 0.0
+    ior: 0.0
+  - amb: 0.1
+    diff: 0.1
+    spec: 0.8
+    shiny: 400
+    refl: 0.0
+    trans: 0.9
+    ior: 1.45
+  - amb: 0.3
+    diff: 0.1
+    spec: 1.0
+    shiny: 1000
+    refl: 0.9
+    trans: 0.0
+    ior: 0.0
+  - amb: 1.0
+    diff: 0.0
+    spec: 0.0
+    shiny: 1.0
+    refl: 0.0
+    trans: 0.0
+    ior: 0.0
+
+shapes:
+  - type: sphere
+    pigmentIndex: 0
+    finishIndex: 2
+    center:
+      x: 3
+      y: 2
+      z: 1
+    radius: 1
+  - type: sphere
+    pigmentIndex: 1
+    finishIndex: 2
+    center:
+      x: -1
+      y: 4
+      z: 1
+    radius: 1
+  - type: sphere
+    pigmentIndex: 2
+    finishIndex: 1
+    center:
+      x: 1
+      y: -1
+      z: 1
+    radius: 1
+  - type: sphere
+    pigmentIndex: 3
+    finishIndex: 0
+    center:
+      x: 0
+      y: 0
+      z: -100
+    radius: 100
+  - type: sphere
+    pigmentIndex: 4
+    finishIndex: 3
+    center:
+      x: 0
+      y: 0
+      z: 0
+    radius: 500

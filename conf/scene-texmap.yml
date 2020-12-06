@@ -1,0 +1,199 @@
+eye:
+  x: 0
+  y: 30
+  z: -200
+
+center:
+  x: 0
+  y: 10
+  z: -100
+up:
+  x: 0
+  y: 1
+  z: 0
+
+fovy: 40.0
+
+lights:
+  - type: ambient
+    location:
+      x: 0.0
+      y: 0.0
+      z: 0.0
+    color:
+      red: 1
+      green: 1
+      blue: 1
+    a: 1
+    b: 0
+    c: 0
+  - location:
+      x: 60
+      y: 160
+      z: -200
+    color:
+      red: 1
+      green: 1
+      blue: 1
+    a: 1
+    b: 0
+    c: 0
+  - location:
+      x: -80
+      y: 160
+      z: -200
+    color:
+      red: 1
+      green: 1
+      blue: 1
+    a: 1
+    b: 0
+    c: 0
+
+pigments:
+  - type: texmap
+    bmpFile: spectrum.bmp
+    sa: 0
+    sb: 0.001
+    sc: 0
+    sd: 0.12
+    ta: 0
+    tb: 0
+    tc: 0
+    td: 0
+  - type: checker
+    color1:
+      red: 0.08
+      green: 0.25
+      blue: 0.20
+    color2:
+      red: 0.93
+      green: 0.83
+      blue: 0.82
+    scale: 40
+  - type: solid
+    color:
+      red: 1
+      green: 1
+      blue: 1
+
+finishes:
+  - amb: 0.8
+    diff: 0
+    spec: 0
+    shiny: 1.0
+    refl: 0.0
+    trans: 0.0
+    ior: 0.0
+  - amb: 0.3
+    diff: 0.4
+    spec: 0
+    shiny: 1
+    refl: 0.3
+    trans: 0
+    ior: 0
+  - amb: 0.11
+    diff: 0.11
+    spec: 0.3
+    shiny: 1000
+    refl: 0.7
+    trans: 0.0
+    ior: 0.0
+
+
+shapes:
+  - type: sphere
+    pigmentIndex: 0
+    finishIndex: 0
+    center:
+      x: 0
+      y: 0
+      z: 0
+    radius: 600
+  - type: sphere
+    pigmentIndex: 2
+    finishIndex: 2
+    center:
+      x: 0
+      y: 32.7
+      z: 0
+    radius: 20
+  - type: sphere
+    pigmentIndex: 2
+    finishIndex: 2
+    center:
+      x: -5.98
+      y: 0
+      z: -22.31
+    radius: 20
+  - type: sphere
+    pigmentIndex: 2
+    finishIndex: 2
+    center:
+      x: -16.32
+      y: 0
+      z: 16.32
+    radius: 20
+  - type: sphere
+    pigmentIndex: 2
+    finishIndex: 2
+    center:
+      x: 22.31
+      y: 0
+      z: 5.98
+    radius: 20
+  - type: sphere
+    pigmentIndex: 2
+    finishIndex: 2
+    center:
+      x: 5.98
+      y: -32.66
+      z: 22.31
+    radius: 20
+  - type: sphere
+    pigmentIndex: 2
+    finishIndex: 2
+    center:
+      x: 16.32
+      y: -32.66
+      z: -16.32
+    radius: 20
+  - type: sphere
+    pigmentIndex: 2
+    finishIndex: 2
+    center:
+      x: -22.31
+      y: -32.66
+      z: -5.98
+    radius: 20
+  - type: sphere
+    pigmentIndex: 2
+    finishIndex: 2
+    center:
+      x: -11.95
+      y: -32.66
+      z: -44.61
+    radius: 20
+  - type: sphere
+    pigmentIndex: 2
+    finishIndex: 2
+    center:
+      x: -32.66
+      y: -32.66
+      z: 32.66
+    radius: 20
+  - type: sphere
+    pigmentIndex: 2
+    finishIndex: 2
+    center:
+      x: 44.61
+      y: -32.66
+      z: 11.95
+    radius: 20
+  - type: plane
+    pigmentIndex: 1
+    finishIndex: 1
+    a: 0
+    b: 1
+    c: 0
+    d: 60

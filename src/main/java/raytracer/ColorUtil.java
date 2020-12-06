@@ -1,6 +1,17 @@
 package raytracer;
 
+import com.fasterxml.jackson.core.JsonGenerator;
+import com.fasterxml.jackson.core.JsonParser;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.core.ObjectCodec;
+import com.fasterxml.jackson.databind.DeserializationContext;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.SerializerProvider;
+import com.fasterxml.jackson.databind.deser.std.StdDeserializer;
+import com.fasterxml.jackson.databind.ser.std.StdSerializer;
+
 import java.awt.Color;
+import java.io.IOException;
 
 public class ColorUtil {
 	public static Color blend(Color base, Color mixin) {
@@ -40,5 +51,48 @@ public class ColorUtil {
 		}
 
 		return new Color(rgb[0], rgb[1], rgb[2]);
+	}
+
+	public static class ColorSerializer extends StdSerializer<Color> {
+
+		public ColorSerializer() {
+			super(Color.class);
+		}
+
+		@Override
+		public void serialize(
+				Color color, JsonGenerator jgen, SerializerProvider provider)
+				throws IOException, JsonProcessingException {
+			jgen.writeStartObject();
+			jgen.writeNumberField("red", color.getRed());
+			jgen.writeNumberField("green", color.getGreen());
+			jgen.writeNumberField("blue", color.getBlue());
+			jgen.writeNumberField("alpha", color.getAlpha());
+			jgen.writeEndObject();
+		}
+	}
+
+	public static class ColorDeserializer extends StdDeserializer<Color> {
+
+		public ColorDeserializer() {
+			super(Color.class);
+		}
+
+		@Override
+		public Color deserialize(JsonParser jp, DeserializationContext ctxt) throws IOException, JsonProcessingException {
+			ObjectCodec codec = jp.getCodec();
+			JsonNode node = codec.readTree(jp);
+
+			float redVal = (float) node.get("red").asDouble();
+			float greenVal = (float) node.get("green").asDouble();
+			float blueVal = (float) node.get("blue").asDouble();
+			float alphaVal = 1.0f;
+			if (node.hasNonNull("alpha")) {
+				alphaVal = (float) node.get("alpha").asDouble();
+			}
+
+			//return new Color(ColorUtil.clamp(redVal), ColorUtil.clamp(greenVal), ColorUtil.clamp(blueVal), ColorUtil.clamp(alphaVal));
+			return new Color(ColorUtil.clamp(redVal), ColorUtil.clamp(greenVal), ColorUtil.clamp(blueVal));
+		}
 	}
 }

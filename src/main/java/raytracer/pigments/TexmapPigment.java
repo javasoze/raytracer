@@ -1,20 +1,34 @@
 package raytracer.pigments;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import raytracer.Point;
 
 import javax.imageio.ImageIO;
-import java.awt.Color;
+import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.net.URL;
 
 public class TexmapPigment implements Pigment {
 	private BufferedImage image;
 	private int rows, cols;
 	private double sa, sb, sc, sd, ta, tb, tc, td;
 
-	public TexmapPigment(File bmpFile, double sa, double sb, double sc, double sd, double ta, double tb, double tc, double td) throws IOException {
-		image = ImageIO.read(bmpFile);
+	@JsonCreator
+	public TexmapPigment(@JsonProperty("bmpFile") File bmpFile,
+						 @JsonProperty("sa") double sa, @JsonProperty("sb") double sb, @JsonProperty("sc") double sc,
+						 @JsonProperty("sd") double sd, @JsonProperty("ta") double ta, @JsonProperty("tb") double tb,
+						 @JsonProperty("tc") double tc, @JsonProperty("td") double td) throws IOException {
+		this(bmpFile.toURI().toURL(), sa, sb, sc, sd, ta, tb, tc, td);
+	}
+
+	public TexmapPigment(URL bmpTexUrl,
+						 @JsonProperty("sa") double sa, @JsonProperty("sb") double sb, @JsonProperty("sc") double sc,
+						 @JsonProperty("sd") double sd, @JsonProperty("ta") double ta, @JsonProperty("tb") double tb,
+						 @JsonProperty("tc") double tc, @JsonProperty("td") double td) throws IOException {
+		image = ImageIO.read(bmpTexUrl);
 
 		this.sa = sa;
 		this.sb = sb;
@@ -29,6 +43,7 @@ public class TexmapPigment implements Pigment {
 		this.rows = image.getHeight();
 	}
 
+	@Override
 	public Color getColor(Point p) {
 		double s = sa*p.x + sb*p.y + sc*p.z + sd;
 		double t = ta*p.x + tb*p.y + tc*p.z + td;
@@ -42,6 +57,7 @@ public class TexmapPigment implements Pigment {
 		return new Color(image.getRGB((int)Math.floor(s * cols), (int)Math.floor(t * rows)));
 	}
 
+	@Override
 	public String toString() {
 		return "textured";
 	}

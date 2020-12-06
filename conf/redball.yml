@@ -1,0 +1,66 @@
+eye:
+  x: 5
+  y: -10
+  z: 5
+
+center:
+  x: 0
+  y: 0
+  z: 0
+up:
+  x: 0
+  y: 0
+  z: 1
+
+fovy: 20.0
+
+lights:
+  - type: ambient
+    location:
+      x: 0.0
+      y: 0.0
+      z: 0.0
+    color:
+      red: 0.5
+      green: 0.5
+      blue: 0.5
+    a: 0
+    b: 0
+    c: 0
+  - location:
+      x: -100
+      y: -100
+      z: 100
+    color:
+      red: 1
+      green: 1
+      blue: 1
+    a: 1
+    b: 0
+    c: 0
+
+pigments:
+  - type: solid
+    color:
+      red: 1.0
+      green: 0.0
+      blue: 0.0
+
+finishes:
+  - amb: 0.7
+    diff: 0.3
+    spec: 0.0
+    shiny: 1.0
+    refl: 0.0
+    trans: 0.0
+    ior: 0.0
+
+shapes:  
+  - type: sphere
+    pigmentIndex: 0
+    finishIndex: 0
+    center:
+      x: 0
+      y: 0
+      z: 0
+    radius: 2

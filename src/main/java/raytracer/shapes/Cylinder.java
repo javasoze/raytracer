@@ -2,7 +2,7 @@ package raytracer.shapes;
 
 import raytracer.*;
 
-public class Cylinder extends Shape {
+public class Cylinder { //extends Shape {
 	private Point base;
 	private Vector axis;
 	private double radius;

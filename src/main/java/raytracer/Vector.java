@@ -3,6 +3,10 @@ package raytracer;
 public class Vector {
 	public double x, y, z;
 
+	public Vector() {
+		x = y = z = 0.0;
+	}
+
 	public Vector(double x, double y, double z) {
 		this.x = x;
 		this.y = y;

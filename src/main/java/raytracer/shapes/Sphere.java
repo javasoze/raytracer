@@ -1,16 +1,21 @@
 package raytracer.shapes;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import raytracer.*;
 
 public class Sphere extends Shape {
-	Point center;
-	double radius;
+	public Point center;
+	public double radius;
 
-	public Sphere(Point center, double radius) {
-		this.center = center;
-		this.radius = radius;
+	@JsonCreator
+	public Sphere(Config config) {
+		super(config);
+		this.center = config.center;
+		this.radius = config.radius;
 	}
 
+	@Override
 	public RayHit intersect(Ray ray) {
 /*
 		Vector eo = new Vector(ray.origin, center);
@@ -79,7 +84,13 @@ public class Sphere extends Shape {
 		return new Vector(center, p).magnitude() < radius;
 	}
 
+	@Override
 	public String toString() {
 		return pigment + " sphere";
+	}
+
+	public static class Config extends Shape.Config{
+		public Point center;
+		public double radius;
 	}
 }

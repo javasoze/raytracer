@@ -1,9 +1,15 @@
 package raytracer;
 
-import java.awt.Color;
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
-public class AmbientLight extends Light {
-	public AmbientLight(Point location, Color color, float a, float b, float c) {
+import java.awt.*;
+
+public class AmbientLight extends DefaultLight {
+
+	@JsonCreator
+	public AmbientLight(@JsonProperty("location") Point location, @JsonProperty("color") Color color,
+						@JsonProperty("a") float a, @JsonProperty("b") float b, @JsonProperty("c") float c) {
 		super(location, color, a, b, c);
 	}
 

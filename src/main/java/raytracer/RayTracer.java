@@ -1,15 +1,22 @@
 package raytracer;
 
 import raytracer.pigments.*;
+import raytracer.shapes.Shape;
 import raytracer.shapes.*;
 
 import javax.imageio.ImageIO;
-import java.awt.Color;
+import java.awt.Polygon;
+import java.awt.*;
 import java.awt.image.BufferedImage;
-import java.io.*;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Scanner;
-import java.util.concurrent.*;
+import java.util.concurrent.LinkedBlockingQueue;
+import java.util.concurrent.ThreadPoolExecutor;
+import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicInteger;
 
 public class RayTracer {
@@ -17,10 +24,10 @@ public class RayTracer {
 	public static final Color BACKGROUND_COLOR = Color.GRAY;
 
 	private Camera camera;
-	private final ArrayList<Light> lights = new ArrayList<Light>();
-	private final ArrayList<Pigment> pigments = new ArrayList<Pigment>();
-	private final ArrayList<Finish> finishes = new ArrayList<Finish>();
-	private final ArrayList<Shape> shapes = new ArrayList<Shape>();
+	private final List<Light> lights = new ArrayList<Light>();
+	private final List<Pigment> pigments = new ArrayList<Pigment>();
+	private final List<Finish> finishes = new ArrayList<Finish>();
+	private final List<Shape> shapes = new ArrayList<Shape>();
 	private final int cols, rows;
 
 	public RayTracer(int cols, int rows) {
@@ -41,7 +48,7 @@ public class RayTracer {
 		for(int i = 1;i < lights.size();i++) {
 //			Log.debug("Checking light " + i + ":");
 			light = lights.get(i);
-			Vector lightRayVec = new Vector(hit.point, light.location);
+			Vector lightRayVec = new Vector(hit.point, ((DefaultLight)light).location);
 			Ray lightRay = new Ray(hit.point, lightRayVec);
 			lightRay.t = lightRayVec.magnitude();
 
@@ -182,6 +189,21 @@ public class RayTracer {
 		}
 	}
 
+	public void loadScene(Scene scene) throws Exception {
+		camera = new Camera(scene.eye, scene.center, scene.up, scene.fovy, cols, rows);
+		lights.addAll(scene.lights);
+		pigments.addAll(scene.pigments);
+		finishes.addAll(scene.finishes);
+		shapes.addAll(scene.shapes);
+		for (var shape : shapes) {
+			shape.setMaterial(pigments.get(shape.pigmentIndex), finishes.get(shape.finishIndex));
+		}
+	}
+
+	public void readSceneYaml(File file) throws Exception {
+		var scene = Scene.MAPPER.readValue(file, Scene.class);
+		loadScene(scene);
+	}
 
 	public void readScene(File file) throws FileNotFoundException {
 		Scanner scanner = new Scanner(file);
@@ -197,7 +219,7 @@ public class RayTracer {
 		int numLights = scanner.nextInt();
 		if(numLights > 0) lights.add(new AmbientLight(readPoint(scanner), readColor(scanner), scanner.nextFloat(), scanner.nextFloat(), scanner.nextFloat()));
 		for(int i=1;i<numLights;i++) {
-			lights.add(new Light(readPoint(scanner), readColor(scanner), scanner.nextFloat(), scanner.nextFloat(), scanner.nextFloat()));
+			lights.add(new DefaultLight(readPoint(scanner), readColor(scanner), scanner.nextFloat(), scanner.nextFloat(), scanner.nextFloat()));
 		}
 
 		// read pigments
@@ -237,8 +259,13 @@ public class RayTracer {
 			String name = scanner.next();
 			Shape shape;
 			if("sphere".equals(name)) {
-				shape = new Sphere(readPoint(scanner), scanner.nextDouble());
-			} else if("plane".equals(name)) {
+				var config = new Sphere.Config();
+				config.center = readPoint(scanner);
+				config.radius = scanner.nextDouble();
+				shape = new Sphere(config);
+			}
+			/*
+			else if("plane".equals(name)) {
 				shape = new Plane(scanner.nextDouble(), scanner.nextDouble(), scanner.nextDouble(), scanner.nextDouble());
 			} else if("cylinder".equals(name)) {
 				shape = new Cylinder(readPoint(scanner), readVector(scanner), scanner.nextDouble());
@@ -263,7 +290,8 @@ public class RayTracer {
 					points.add(readPoint(scanner));
 				}
 				shape = new Bezier(points);
-			} else {
+			}*/
+			else {
 				throw new UnsupportedOperationException("Unrecognized shape: '" + name + "'.");
 			}
 

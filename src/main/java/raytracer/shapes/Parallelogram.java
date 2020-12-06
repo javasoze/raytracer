@@ -2,7 +2,7 @@ package raytracer.shapes;
 
 import raytracer.*;
 
-public class Parallelogram extends Shape {
+public class Parallelogram { //extends Shape {
 	private final Point p1, p2, p3, p4;
 
 	public Parallelogram(Point p1, Point p2, Point p3) {
@@ -14,7 +14,7 @@ public class Parallelogram extends Shape {
 		Log.warn("Parallelogram shape is not supported. This shape will be ignored.");
 	}
 
-	@Override
+
 	public RayHit intersect(Ray ray) {
 		return null;
 	}

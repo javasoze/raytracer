@@ -1,8 +1,14 @@
 package raytracer.pigments;
 
-import raytracer.*;
 
-import java.awt.Color;
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import raytracer.ColorUtil;
+import raytracer.Log;
+import raytracer.Point;
+import raytracer.Vector;
+
+import java.awt.*;
 
 public class GradientPigment implements Pigment {
 	private final Point origin;
@@ -10,7 +16,9 @@ public class GradientPigment implements Pigment {
 	private final Color start;
 	private final Color end;
 
-	public GradientPigment(Point origin, Vector vector, Color start, Color end) {
+	@JsonCreator
+	public GradientPigment(@JsonProperty("origin") Point origin, @JsonProperty("vector") Vector vector,
+						   @JsonProperty("start") Color start, @JsonProperty("end") Color end) {
 		this.origin = origin;
 		this.v = vector;
 		this.start = start;
@@ -20,8 +28,6 @@ public class GradientPigment implements Pigment {
 	}
 
 	public Color getColor(Point p) {
-		if(true) return start;
-
 		double d = Math.abs(new Vector(origin, p).dot(v)) / v.magnitude();
 		double percent = (d / v.magnitude());
 

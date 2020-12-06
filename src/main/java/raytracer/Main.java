@@ -1,74 +1,58 @@
 package raytracer;
 
+import com.google.common.io.Files;
+import net.sourceforge.argparse4j.ArgumentParsers;
+import net.sourceforge.argparse4j.inf.ArgumentParser;
+import net.sourceforge.argparse4j.inf.ArgumentParserException;
+import net.sourceforge.argparse4j.inf.Namespace;
+
 import java.io.File;
-import java.io.IOException;
-import java.util.Scanner;
 
 public class Main {
-	private static final String USAGE = "Usage:\n"+
-			"java -cp src raytracer.Main infile bmpfile width height [-options]\n"+
-			"\n"+
-			"    where:\n"+
-			"        infile    - input file name\n"+
-			"        bmpfile   - bmp output file name\n"+
-			"        width     - image width (in pixels)\n"+
-			"        height    - image hreight (in pixels)\n"+
-//			"        -test     - run in test mode (see below)\n"+
-//			"        -noshadow - don't compute shadows\n"+
-//			"        -noreflec - don't do reflections\n"+
-//			"        -notrans  - don't do transparency\n"+
-			"        -aa       - use anti-aliasing (~4x slower)\n"+
-			"        -multi    - use multi-threading (good for large, anti-aliased images)";
-//			"        -nocap    - cylinders and cones are infinite";
-
 	public static boolean DEBUG = false;
 	public static boolean ANTI_ALIAS = false;
 	public static boolean MULTI_THREAD = false;
 
-
-	private static void printUsage() {
-		System.out.println(USAGE);
-	}
-
-	public static void main(String[] args) throws IOException, InterruptedException {
-		if(args.length < 4) {
-			printUsage();
-			System.exit(0);
+	public static void main(String[] args) throws Exception {
+		ArgumentParser parser = ArgumentParsers.newFor("raytracer").build()
+				.defaultHelp(true)
+				.description("Java raytracer");
+		parser.addArgument("-i", "--input").required(true)
+				.help("Input scene file");
+		parser.addArgument("-o", "--output").required(false)
+				.help("Output BMP file");
+		parser.addArgument("-d", "--debug").required(false).setDefault(false)
+				.help("enable debugging - default false");
+		parser.addArgument("-a", "--antialiasing").required(false).setDefault(true)
+				.help("enable antialiasing - default true");
+		parser.addArgument("-m", "--multithread").required(false).setDefault(false)
+				.help("enable multi-threading - default true");
+		Namespace ns = null;
+		try {
+			ns = parser.parseArgs(args);
+		} catch (ArgumentParserException e) {
+			parser.handleError(e);
+			System.exit(1);
 		}
 
-		// required arguments
-		File inFile = new File(args[0]);
-		File outFile = new File(args[1]);
-		int cols = Integer.parseInt(args[2]);
-		int rows = Integer.parseInt(args[3]);
+		File sceneFile = new File(ns.getString("input"));
+		Scene scene = Scene.MAPPER.readValue(sceneFile, Scene.class);
 
-		// optional arguments
-		int i = 0;
-		for(String arg: args) {
-			if(i++ < 4) continue;
-			if("-test".equals(arg)) {
-				DEBUG = true;
-			} else if("-aa".equals(arg)) {
-				ANTI_ALIAS = true;
-			} else if("-multi".equals(arg)) {
-				MULTI_THREAD = true;
-			} else {
-				System.out.print("Unrecognized option: '" + arg + "' ignored.");
-			}
-		}
+		DEBUG = ns.getBoolean("debug");
+		ANTI_ALIAS = ns.getBoolean("antialiasing");
+		MULTI_THREAD = ns.getBoolean("multithread");
 
-		RayTracer rayTracer = new RayTracer(cols, rows);
-		rayTracer.readScene(inFile);
-		if(DEBUG) {
-			while(true) {
-				Scanner scanner = new Scanner(System.in);
-				System.out.println("Input column and row of pixel (relative to upper left corner):");
-				int col = scanner.nextInt();
-				int row = scanner.nextInt();
-				rayTracer.getPixelColor(col, row);
-			}
+		RayTracer rayTracer = new RayTracer(scene.width, scene.height);
+		rayTracer.loadScene(scene);
+
+		var output = ns.getString("output");
+		File outFile = null;
+		if (output != null) {
+			outFile = new File(output);
 		} else {
-			rayTracer.draw(outFile);
+			var name = Files.getNameWithoutExtension(sceneFile.getName());
+			outFile = new File(name + ".bmp");
 		}
+		rayTracer.draw(outFile);
 	}
 }

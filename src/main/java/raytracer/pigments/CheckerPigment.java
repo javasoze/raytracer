@@ -1,5 +1,7 @@
 package raytracer.pigments;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import raytracer.Point;
 
 import java.awt.Color;
@@ -10,7 +12,10 @@ public class CheckerPigment implements Pigment {
 	private Color color2;
 	private double scale;
 
-	public CheckerPigment(Color color1, Color color2, double scale) {
+	@JsonCreator
+	public CheckerPigment(@JsonProperty("color1") Color color1,
+						  @JsonProperty("color2") Color color2,
+						  @JsonProperty("scale") double scale) {
 		this.color1 = color1;
 		this.color2 = color2;
 		this.scale = scale;
